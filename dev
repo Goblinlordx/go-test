@@ -1,0 +1,24 @@
+#!/bin/bash
+
+COMMAND=$1
+shift
+
+case $COMMAND in
+  get)
+    docker compose run --rm app go get
+    ;;
+  wire)
+    docker compose run --rm app go run github.com/google/wire/cmd/wire ./cmd/run
+    ;;
+  run)
+    ./dev wire \
+    && docker compose run --rm app go run ./... ./cmd/run
+    ;;
+  x)
+    docker compose run --rm app $*
+    ;;
+  *)
+  echo "Invalid command: $COMMAND"
+  exit 1
+  ;;
+esac
