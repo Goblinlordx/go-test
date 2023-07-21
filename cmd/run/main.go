@@ -1,10 +1,8 @@
 package main
 
-import (
-	"fmt"
-)
+import "github.com/goblinlordx/go-test/app"
 
 func main() {
-	a := InitializeApp()
-	fmt.Println(a.Test())
+	a := app.InitializeApp()
+	_ = a
 }

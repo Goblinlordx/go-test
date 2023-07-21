@@ -3,19 +3,48 @@
 COMMAND=$1
 shift
 
+BUILD_OUTPUT=./.build/
+
 case $COMMAND in
   get)
-    docker compose run --rm app go get
+    ./dev x go get
     ;;
   wire)
-    docker compose run --rm app go run github.com/google/wire/cmd/wire ./cmd/run
+    ./dev x go run github.com/google/wire/cmd/wire ./...
     ;;
   run)
     ./dev wire \
-    && docker compose run --rm app go run ./... ./cmd/run
+    && ./dev x go run ./cmd/run
+    ;;
+  build)
+    ./dev wire \
+    && ./dev x go build -o $BUILD_OUTPUT ./... ./cmd/run
+    ;;
+  clean_db)
+    rm -f .data/data.db \
+    && ./dev x go run ./cmd/migrate
+    ;;
+  clean_db:init_data)
+    ./dev clean_db \
+    && ./dev x go run ./cmd/init_dataset
+    ;;
+  test:clean_db:init_test_data)
+    rm -f .data/test.db \
+    && ./dev x:test go run ./cmd/migrate \
+    && ./dev x:test go run ./cmd/init_dataset \
+    && ./dev x:test go run ./cmd/init_test_dataset \
+    ;;
+  test)
+    ./dev x:test go test ./...
+    ;;
+  test:v)
+    ./dev x:test go test -v ./...
     ;;
   x)
     docker compose run --rm app $*
+    ;;
+  x:test)
+    docker compose run --rm test_app $*
     ;;
   *)
   echo "Invalid command: $COMMAND"

@@ -1,15 +1,23 @@
 package app
 
+import "github.com/goblinlordx/go-test/accounting"
+
 type App struct {
-	val string
+	AccountRepository     *accounting.AccountRepository
+	CategoryRepository    *accounting.CategoryRepository
+	TransactionRepository *accounting.TransactionRepository
+
+	AccountCommander     *accounting.AccountCommander
+	TransactionCommander *accounting.TransactionCommander
 }
 
-func ProvideApp() App {
+func ProvideApp(ar *accounting.AccountRepository, cr *accounting.CategoryRepository, tr *accounting.TransactionRepository, ac *accounting.AccountCommander, tc *accounting.TransactionCommander) App {
 	return App{
-		val: "test",
-	}
-}
+		AccountRepository:     ar,
+		CategoryRepository:    cr,
+		TransactionRepository: tr,
 
-func (s *App) Test() string {
-	return s.val
+		AccountCommander:     ac,
+		TransactionCommander: tc,
+	}
 }
