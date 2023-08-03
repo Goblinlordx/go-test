@@ -23,6 +23,12 @@ services:
       - ./.data:/data
       - deps:/go
       - cache:/root/.cache/go-build
+  sqlite:
+    image: keinos/sqlite3:3.42.0
+    working_dir: /data
+    volumes:
+      - ./.data:/data
+
 
 volumes:
   deps:
