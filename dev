@@ -28,6 +28,9 @@ case $COMMAND in
     ./dev clean_db \
     && ./dev x go run ./cmd/init_dataset
     ;;
+  sqlite)
+    docker compose run --rm sqlite sqlite3 data.db "$*"
+    ;;
   test:clean_db:init_test_data)
     rm -f .data/test.db \
     && ./dev x:test go run ./cmd/migrate \
