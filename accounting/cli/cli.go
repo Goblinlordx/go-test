@@ -18,18 +18,13 @@ func CLIRoot() *cobra.Command {
 		PreRunE: cli.DefaultHelp,
 	}
 
-	root.AddCommand(CLIAccountCommand())
+	root.AddCommand(cliAccountCommand())
 
 	return &root
 }
 
-func CLIAccountCommand() *cobra.Command {
-	ac := cobra.Command{
-		Use:     "account",
-		PreRunE: cli.DefaultHelp,
-	}
-
-	createCommand := cobra.Command{
+func cliAccountCreateCommand() *cobra.Command {
+	return &cobra.Command{
 		Use:  "create",
 		Args: cobra.ExactArgs(2),
 		Run: func(cmd *cobra.Command, args []string) {
@@ -51,8 +46,10 @@ func CLIAccountCommand() *cobra.Command {
 			})
 		},
 	}
+}
 
-	deleteCommand := cobra.Command{
+func cliAccountDeleteCommand() *cobra.Command {
+	return &cobra.Command{
 		Use:  "delete",
 		Args: cobra.ExactArgs(1),
 		Run: func(cmd *cobra.Command, args []string) {
@@ -73,9 +70,16 @@ func CLIAccountCommand() *cobra.Command {
 			})
 		},
 	}
+}
 
-	ac.AddCommand(&createCommand)
-	ac.AddCommand(&deleteCommand)
+func cliAccountCommand() *cobra.Command {
+	ac := cobra.Command{
+		Use:     "account",
+		PreRunE: cli.DefaultHelp,
+	}
+
+	ac.AddCommand(cliAccountCreateCommand())
+	ac.AddCommand(cliAccountDeleteCommand())
 
 	return &ac
 }
