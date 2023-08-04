@@ -16,6 +16,12 @@ case $COMMAND in
     ./dev wire \
     && ./dev x go run ./cmd/run
     ;;
+  cli)
+    ./dev x go run ./cmd/cli $*
+    ;;
+  cli:test)
+    ./dev x:test go run ./cmd/cli "$*"
+    ;;
   build)
     ./dev wire \
     && ./dev x go build -o $BUILD_OUTPUT ./... ./cmd/run

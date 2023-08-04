@@ -10,7 +10,7 @@ import (
 type Account struct {
 	Id             uuid.UUID `gorm:"primaryKey"`
 	CurrencySymbol currency.CurrencySymbol
-	Name           string
+	Name           string `gorm:"index:unq_account_name,unique"`
 }
 
 type Transaction struct {
