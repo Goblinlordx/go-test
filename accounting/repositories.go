@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/goblinlordx/go-test/db"
 	"github.com/goblinlordx/go-test/db/modifier"
 	db_tx "github.com/goblinlordx/go-test/db/tx"
 	"github.com/goblinlordx/go-test/error_utils"
@@ -18,6 +19,17 @@ type AccountRepository struct {
 
 func ProvideAccountRepository() *AccountRepository {
 	return &AccountRepository{}
+}
+
+func (ar *AccountRepository) Search(ctx context.Context) ([]Account, error) {
+	res := make([]Account, 0)
+	err := db.WithDb(ctx, func(db *gorm.DB) error {
+		q := db.Model(&Account{})
+
+		return q.Scan(&res).Error
+	})
+
+	return res, err
 }
 
 type CategoryRepository struct {

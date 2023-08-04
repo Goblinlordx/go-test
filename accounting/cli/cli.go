@@ -72,6 +72,30 @@ func cliAccountDeleteCommand() *cobra.Command {
 	}
 }
 
+func cliAccountQueryCommand() *cobra.Command {
+	return &cobra.Command{
+		Use: "query",
+		// Args: cobra.ExactArgs(1),
+		Run: func(cmd *cobra.Command, args []string) {
+			app := app.InitializeApp()
+			ctx := context.Background()
+			db.WithDbCtx(ctx, func(ctx context.Context) error {
+				res, err := app.AccountRepository.Search(ctx)
+
+				if err != nil {
+					log.Fatal(err)
+				}
+
+				for _, v := range res {
+					fmt.Println(v)
+				}
+
+				return nil
+			})
+		},
+	}
+}
+
 func cliAccountCommand() *cobra.Command {
 	ac := cobra.Command{
 		Use:     "account",
@@ -80,6 +104,7 @@ func cliAccountCommand() *cobra.Command {
 
 	ac.AddCommand(cliAccountCreateCommand())
 	ac.AddCommand(cliAccountDeleteCommand())
+	ac.AddCommand(cliAccountQueryCommand())
 
 	return &ac
 }
