@@ -3,6 +3,7 @@ package accounting_cli
 import (
 	"context"
 	"fmt"
+	"log"
 
 	"github.com/goblinlordx/go-test/accounting"
 	"github.com/goblinlordx/go-test/app"
@@ -12,13 +13,6 @@ import (
 )
 
 func CLIRoot() *cobra.Command {
-	// asdf := cobra.Command{
-	// 	Use: "asdf",
-	// 	Run: func(cmd *cobra.Command, args []string) {
-	// 		fmt.Println("asdf")
-	// 	},
-	// }
-
 	root := cobra.Command{
 		Use:     "accounting",
 		PreRunE: cli.DefaultHelp,
@@ -42,23 +36,46 @@ func CLIAccountCommand() *cobra.Command {
 			app := app.InitializeApp()
 			ctx := context.Background()
 			db.WithDbCtx(ctx, func(ctx context.Context) error {
-
 				id, err := app.AccountCommander.Create(ctx, accounting.AccountCreateInput{
 					Name:           args[0],
 					CurrencySymbol: args[1],
 				})
 
+				if err != nil {
+					log.Fatal(err)
+				}
+
 				fmt.Println("Created Account ID: ", id)
 
+				return nil
+			})
+		},
+	}
+
+	deleteCommand := cobra.Command{
+		Use:  "delete",
+		Args: cobra.ExactArgs(1),
+		Run: func(cmd *cobra.Command, args []string) {
+			app := app.InitializeApp()
+			ctx := context.Background()
+			db.WithDbCtx(ctx, func(ctx context.Context) error {
+				err := app.AccountCommander.Delete(ctx, accounting.AccountDeleteInput{
+					Ids: []string{args[0]},
+				})
+
 				if err != nil {
-					panic(err)
+					log.Fatal(err)
 				}
+
+				fmt.Println("Delete Account ID: ", args[0])
+
 				return nil
 			})
 		},
 	}
 
 	ac.AddCommand(&createCommand)
+	ac.AddCommand(&deleteCommand)
 
 	return &ac
 }
