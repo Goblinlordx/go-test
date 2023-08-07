@@ -25,6 +25,11 @@ func (ar *AccountRepository) Search(ctx context.Context) ([]Account, error) {
 	res := make([]Account, 0)
 	err := db.WithDb(ctx, func(db *gorm.DB) error {
 		q := db.Model(&Account{})
+		m := modifier.GetModifiers(ctx)
+		err := modifier.Apply(q, m...)
+		if err != nil {
+			return err
+		}
 
 		return q.Scan(&res).Error
 	})

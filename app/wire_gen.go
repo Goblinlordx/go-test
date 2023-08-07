@@ -14,12 +14,13 @@ import (
 // Injectors from wire.go:
 
 func InitializeApp() App {
+	currencyRepository := currency.ProvideCurrencyRepository()
 	accountRepository := accounting.ProvideAccountRepository()
 	categoryRepository := accounting.ProvideCategoryRepository()
 	transactionRepository := accounting.ProvideTransactionRepository()
-	currencyRepository := currency.ProvideCurrencyRepository()
+	accountFilterer := accounting.ProvideAccountFilterer(currencyRepository)
 	accountCommander := accounting.ProvideAccountCommander(accountRepository, transactionRepository, currencyRepository)
 	transactionCommander := accounting.ProvideTransactionCommander(transactionRepository)
-	app := ProvideApp(accountRepository, categoryRepository, transactionRepository, accountCommander, transactionCommander)
+	app := ProvideApp(currencyRepository, accountRepository, categoryRepository, transactionRepository, accountFilterer, accountCommander, transactionCommander)
 	return app
 }

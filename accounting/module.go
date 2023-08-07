@@ -5,4 +5,4 @@ import (
 	"github.com/google/wire"
 )
 
-var Module = wire.NewSet(ProvideAccountRepository, ProvideCategoryRepository, ProvideTransactionRepository, ProvideAccountCommander, ProvideTransactionCommander, currency.Module)
+var Module = wire.NewSet(ProvideAccountFilterer, ProvideAccountRepository, ProvideCategoryRepository, ProvideTransactionRepository, ProvideAccountCommander, ProvideTransactionCommander, currency.Module)

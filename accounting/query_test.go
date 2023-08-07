@@ -11,7 +11,6 @@ import (
 
 func TestTransactionQuery(t *testing.T) {
 	err := db_tx.WithTestTx(func(ctx context.Context) error {
-
 		tr := TransactionRepository{}
 
 		start := time.Date(

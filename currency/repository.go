@@ -15,7 +15,7 @@ type Currency struct {
 
 type CurrencyRepository struct {
 	currencies []*Currency
-	symbolMap  map[CurrencySymbol]*Currency
+	symbolMap  map[string]*Currency
 }
 
 func ProvideCurrencyRepository() *CurrencyRepository {
@@ -38,9 +38,9 @@ func ProvideCurrencyRepository() *CurrencyRepository {
 			Name:          d[3],
 		})
 	}
-	var symbolMap = make(map[CurrencySymbol]*Currency)
+	var symbolMap = make(map[string]*Currency)
 	for _, c := range currencies {
-		symbolMap[c.Symbol] = c
+		symbolMap[string(c.Symbol)] = c
 	}
 
 	return &CurrencyRepository{
@@ -50,7 +50,7 @@ func ProvideCurrencyRepository() *CurrencyRepository {
 }
 
 func (cm *CurrencyRepository) GetBySymbol(cc string) (Currency, error) {
-	c, ok := cm.symbolMap[CurrencySymbol(cc)]
+	c, ok := cm.symbolMap[cc]
 	if !ok {
 		return Currency{}, errors.New("invalid currency symbol")
 	}

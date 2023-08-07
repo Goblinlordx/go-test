@@ -17,7 +17,7 @@ case $COMMAND in
     && ./dev x go run ./cmd/run
     ;;
   cli)
-    ./dev x go run ./cmd/cli $*
+    ./dev x go run ./cmd/cli "$*"
     ;;
   cli:test)
     ./dev x:test go run ./cmd/cli "$*"

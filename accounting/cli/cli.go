@@ -9,6 +9,7 @@ import (
 	"github.com/goblinlordx/go-test/app"
 	"github.com/goblinlordx/go-test/cli"
 	"github.com/goblinlordx/go-test/db"
+	"github.com/goblinlordx/go-test/db/modifier"
 	"github.com/spf13/cobra"
 )
 
@@ -73,27 +74,41 @@ func cliAccountDeleteCommand() *cobra.Command {
 }
 
 func cliAccountQueryCommand() *cobra.Command {
-	return &cobra.Command{
+	filters := accounting.AccountFilterInput{}
+	cmd := cobra.Command{
 		Use: "query",
 		// Args: cobra.ExactArgs(1),
 		Run: func(cmd *cobra.Command, args []string) {
 			app := app.InitializeApp()
 			ctx := context.Background()
 			db.WithDbCtx(ctx, func(ctx context.Context) error {
-				res, err := app.AccountRepository.Search(ctx)
+				return modifier.WithModifierScope(ctx, func(ctx context.Context) error {
+					ctx, err := app.AccountFilterer.Apply(ctx, filters)
+					if err != nil {
+						log.Fatal(err)
+					}
 
-				if err != nil {
-					log.Fatal(err)
-				}
+					res, err := app.AccountRepository.Search(ctx)
 
-				for _, v := range res {
-					fmt.Println(v)
-				}
+					if err != nil {
+						log.Fatal(err)
+					}
 
-				return nil
+					for _, v := range res {
+						fmt.Println(v)
+					}
+
+					return nil
+				})
 			})
 		},
 	}
+
+	cmd.Flags().StringVarP(&filters.Id, "id", "i", "", "test 2")
+	cmd.Flags().StringVarP(&filters.Name, "name", "n", "", "test 2")
+	cmd.Flags().StringVarP(&filters.CurrencySymbol, "currencySymbol", "c", "", "test 2")
+
+	return &cmd
 }
 
 func cliAccountCommand() *cobra.Command {
