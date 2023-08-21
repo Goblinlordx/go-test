@@ -20,6 +20,17 @@ func ProvideTestAccountCommander() *AccountCommander {
 	return accountCommander
 }
 
+func ProvideTestAccountRepository() *AccountRepository {
+	accountRepository := ProvideAccountRepository()
+	return accountRepository
+}
+
+func ProvideTestAccountFilterer() *AccountFilterer {
+	currencyRepository := currency.ProvideCurrencyRepository()
+	accountFilterer := ProvideAccountFilterer(currencyRepository)
+	return accountFilterer
+}
+
 func ProvideTestTransactionCommander() *TransactionCommander {
 	transactionRepository := ProvideTransactionRepository()
 	transactionCommander := ProvideTransactionCommander(transactionRepository)

@@ -11,6 +11,18 @@ func ProvideTestAccountCommander() *AccountCommander {
 	return &AccountCommander{}
 }
 
+func ProvideTestAccountRepository() *AccountRepository {
+	wire.Build(Module)
+
+	return &AccountRepository{}
+}
+
+func ProvideTestAccountFilterer() *AccountFilterer {
+	wire.Build(Module)
+
+	return &AccountFilterer{}
+}
+
 func ProvideTestTransactionCommander() *TransactionCommander {
 	wire.Build(Module)
 

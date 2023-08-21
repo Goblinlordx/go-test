@@ -88,7 +88,7 @@ func cliAccountQueryCommand() *cobra.Command {
 						log.Fatal(err)
 					}
 
-					res, err := app.AccountRepository.Search(ctx)
+					res, err := app.AccountRepository.List(ctx)
 
 					if err != nil {
 						log.Fatal(err)

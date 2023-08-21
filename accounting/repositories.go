@@ -21,7 +21,7 @@ func ProvideAccountRepository() *AccountRepository {
 	return &AccountRepository{}
 }
 
-func (ar *AccountRepository) Search(ctx context.Context) ([]Account, error) {
+func (ar *AccountRepository) List(ctx context.Context) ([]Account, error) {
 	res := make([]Account, 0)
 	err := db.WithDb(ctx, func(db *gorm.DB) error {
 		q := db.Model(&Account{})
